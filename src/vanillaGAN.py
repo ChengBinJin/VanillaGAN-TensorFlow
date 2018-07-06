@@ -98,7 +98,7 @@ class VanillaGAN(object):
         return [d_loss, g_loss], summary
 
     def sample_imgs(self):
-        g_feed = {self.z: self.sample_z(num=self.flags.batch_size)}
+        g_feed = {self.z: self.sample_z(num=self.flags.sample_size)}
         y_fakes = self.sess.run(self.g_samples, feed_dict=g_feed)
         # y_fakes = self.sess.run(self.g_samples, feed_dict=g_feed)
 
@@ -119,7 +119,7 @@ class VanillaGAN(object):
 
     def plots(self, imgs_, iter_time, save_file):
         # reshape image from vector to (N, H, W, C)
-        imgs_fake = np.reshape(imgs_[0], (self.flags.batch_size, *self.image_size))
+        imgs_fake = np.reshape(imgs_[0], (self.flags.sample_size, *self.image_size))
 
         imgs = []
         for img in imgs_fake:
