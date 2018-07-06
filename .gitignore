@@ -1,4 +1,4 @@
-.idea
-__pycache__
-cifar10/
-mnist/
+src/.idea
+src/__pycache__
+src/cifar10/
+src/mnist/
