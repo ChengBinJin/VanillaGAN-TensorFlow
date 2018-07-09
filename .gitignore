@@ -2,3 +2,4 @@ src/.idea
 src/__pycache__
 src/cifar10/
 src/mnist/
+src/github_imgs
