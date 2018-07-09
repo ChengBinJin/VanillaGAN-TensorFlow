@@ -4,9 +4,12 @@
 # Written by Cheng-Bin Jin
 # Email: sbkim0407@gmail.com
 # ---------------------------------------------------------
+
 import collections
 import numpy as np
 import tensorflow as tf
+import matplotlib as mpl
+mpl.use('TkAgg')  # or whatever other backend that you want to solve Segmentation fault (core dumped)
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from tensorflow.contrib.layers import flatten
@@ -20,7 +23,7 @@ class VanillaGAN(object):
         self.sess = sess
         self.flags = flags
         self.image_size = image_size
-        self.num_hidden = 128
+        self.num_hiddens = [128, 256]
         self.out_func = tf.nn.tanh if self.flags.dataset == 'cifar10' else tf.nn.sigmoid
 
         self._build_net()
@@ -71,19 +74,35 @@ class VanillaGAN(object):
 
     def generator(self, x_data, name='g_'):
         with tf.variable_scope(name):
-            x_data = flatten(x_data)
-            g0 = tf.nn.relu(tf_utils.linear(x_data, self.num_hidden, name='fc1'), name='relu1')
-            g1 = tf_utils.linear(g0, self.image_size[0] * self.image_size[1] * self.image_size[2])
+            x_data, output = flatten(x_data), None
 
-        return self.out_func(g1)
+            if self.flags.dataset == 'mnist':
+                g0 = tf.nn.relu(tf_utils.linear(x_data, self.num_hiddens[0], name='fc1'), name='relu1')
+                output = tf_utils.linear(g0, self.image_size[0] * self.image_size[1] * self.image_size[2])
+            elif self.flags.dataset == 'cifar10':
+                g0 = tf.nn.relu(tf_utils.linear(x_data, self.num_hiddens[0], name='fc1'), name='relu1')
+                g1 = tf.nn.relu(tf_utils.linear(g0, self.num_hiddens[1], name='fc2'), name='relu2')
+                output = tf_utils.linear(g1, self.image_size[0] * self.image_size[1] * self.image_size[2])
+            else:
+                raise NotImplementedError
+
+        return self.out_func(output)
 
     def discriminator(self, y_data, name='d_', is_reuse=False):
         with tf.variable_scope(name, reuse=is_reuse):
-            y_data = flatten(y_data)
-            d0 = tf.nn.relu(tf_utils.linear(y_data, self.num_hidden, name='fc1'))
-            d1 = tf_utils.linear(d0, 1, name='fc2')
+            y_data, output = flatten(y_data), None
 
-        return tf.nn.sigmoid(d1), d1
+            if self.flags.dataset == 'mnist':
+                d0 = tf.nn.relu(tf_utils.linear(y_data, self.num_hiddens[0], name='fc1'))
+                output = tf_utils.linear(d0, 1, name='fc2')
+            elif self.flags.dataset == 'cifar10':
+                d0 = tf.nn.relu(tf_utils.linear(y_data, self.num_hiddens[0], name='fc1'))
+                d1 = tf.nn.relu(tf_utils.linear(d0, self.num_hiddens[1], name='fc2'))
+                output = tf_utils.linear(d1, 1, name='fc3')
+            else:
+                raise NotImplementedError
+
+        return tf.nn.sigmoid(output), output
 
     def train_step(self, imgs):
         feed = {self.z: self.sample_z(num=self.flags.batch_size),
