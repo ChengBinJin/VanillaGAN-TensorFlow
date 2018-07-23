@@ -1,5 +1,5 @@
 # VanillaGAN-TensorFlow
-This repository is Tensorflow implementation of Ian J. Goodfellow's [Generative Adversarial Nets, NIPS2014](https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf). 
+This repository is a Tensorflow implementation of Ian J. Goodfellow's [Generative Adversarial Nets, NIPS2014](https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf). 
 
 <p align='center'>
   <img src="https://user-images.githubusercontent.com/37034031/42316086-e7223f64-8083-11e8-8653-2e9e52bf3e79.png" width=600)
