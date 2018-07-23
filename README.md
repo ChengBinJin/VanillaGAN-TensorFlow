@@ -103,5 +103,9 @@ Please refer to the above arguments.
 ### Attributions/Thanks
 - Some readme formatting was borrowed from [Logan Engstrom](https://github.com/lengstrom/fast-style-transfer)
 
-### License
+## License
 Copyright (c) 2018 Cheng-Bin Jin. Contact me for commercial use (or rather any use that is not academic research) (email: sbkim0407@gmail.com). Free for research use, as long as proper attribution is given and this copyright notice is retained.
+
+## Related Projects
+- [DCGAN](https://github.com/ChengBinJin/DCGAN-TensorFlow)
+- [pix2pix](https://github.com/ChengBinJin/pix2pix-tensorflow)
